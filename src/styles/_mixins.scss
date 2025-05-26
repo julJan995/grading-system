@@ -1,0 +1,28 @@
+@mixin mobile {
+    @media (max-width: #{var(--breakpoint-mobile)}px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{var(--breakpoint-mobile)}px) and (max-width: #{var(--breakpoint-desktop)}px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{var(--breakpoint-desktop)}px) {
+        @content;
+    }
+}
+
+@mixin circle-icon($background-color, $icon-color: var(--white), $size: 50px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: $size;
+    height: $size;
+    background-color: $background-color;
+    color: $icon-color;
+}

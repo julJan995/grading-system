@@ -1,0 +1,27 @@
+@use '../../../styles/mixins' as mixins;
+
+.header {
+    height: 60px;
+    width: calc(100vw - 85px);
+    position: fixed;
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-gray);
+    margin-left: 85px;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; 
+
+    @include mixins.tablet {
+        height: 90px;
+        margin-left: 90px;
+    }
+
+    @include mixins.desktop {
+        height: 100px;
+        margin-left: 100px;
+    }
+}

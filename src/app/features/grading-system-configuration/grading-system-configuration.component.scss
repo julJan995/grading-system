@@ -1,0 +1,18 @@
+.configuration {
+    display: flex;
+    flex-direction: row;
+    padding-top: 60px;
+    padding-left: 100px;
+
+    &__grade-list {
+        width: calc(50vw - 100px);
+        height: 100vh;
+        background-color: var(--color-green-light);
+    }
+
+    &__grade-form {
+        width: calc(50vw - 100px);
+        height: 100vh;
+        background-color: var(--color-gray);
+    }
+}

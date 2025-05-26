@@ -1,0 +1,16 @@
+@use '../../../styles/mixins' as mixins;
+
+.avatar {
+    @include mixins.circle-icon(var(--color-green-dark));
+    cursor: pointer;
+    
+    &:hover {
+        background-color: color-mix(in srgb,
+                var(--color-green-dark) 90%,
+                white 10%);
+    }
+
+    mat-icon {
+        color: var(--color-white);
+    }
+}

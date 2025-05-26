@@ -1,0 +1,32 @@
+<app-header></app-header>
+<div class="configuration">
+    <div class="configuration__grade-list">
+        <button mat-raised-button color="primary">
+            ADD NEW GRADE
+        </button>
+    </div>
+    <div class="configuration__grade-form">
+        <form [formGroup]="gradeForm" (ngSubmit)="onSubmit()">
+            <mat-form-field>
+                <mat-label>Percent from</mat-label>
+                <input matInput type="number" formControlName="minPercentage">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Percent to</mat-label>
+                <input matInput type="number" formControlName="maxPercentage">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Grade</mat-label>
+                <input matInput type="text" formControlName="grade">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Grade description</mat-label>
+                <input matInput type="text" formControlName="gradeDescription">
+            </mat-form-field>
+        </form>
+    </div>
+
+</div>

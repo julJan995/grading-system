@@ -1,0 +1,10 @@
+@use '../../../styles/mixins' as mixins;
+
+.menu {
+    @include mixins.circle-icon(var(--color-green-dark));
+    cursor: pointer;
+
+    mat-icon {
+        color: var(--color-white);
+    }
+}
