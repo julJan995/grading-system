@@ -1,11 +1,25 @@
 <app-header></app-header>
 <div class="configuration">
     <div class="configuration__grade-list">
-        <button mat-raised-button color="primary">
-            ADD NEW GRADE
+        @for (grade of gradesWithRanges(); track grade.id) {
+        <div
+            class="grade-item"
+            [class.grade-item--selected]="selectedGradeId() === grade.id"
+            (click)="selectGrade(grade.id)">
+                <strong>{{ grade.symbolicGrade }}</strong>
+                {{ grade.minPercentage }}% - {{ grade.maxPercentage }}%
+                <mat-icon
+                    matTooltip="Delete grade"
+                    matTooltipPosition="above"
+                    (click)="deleteGrade(grade.id)">delete</mat-icon>
+        </div>
+        }
+        <button mat-button class="new-grade-btn" (click)="addNewGrade()">
+            <mat-icon>add</mat-icon> ADD NEW GRADE
         </button>
     </div>
     <div class="configuration__grade-form">
+        @if (isEditFormVisible) {
         <form [formGroup]="gradeForm" (ngSubmit)="onSubmit()">
             <mat-form-field>
                 <mat-label>Percent from</mat-label>
@@ -19,14 +33,15 @@
 
             <mat-form-field>
                 <mat-label>Grade</mat-label>
-                <input matInput type="text" formControlName="grade">
+                <input matInput type="text" formControlName="symbolicGrade">
             </mat-form-field>
 
             <mat-form-field>
                 <mat-label>Grade description</mat-label>
-                <input matInput type="text" formControlName="gradeDescription">
+                <input matInput type="text" formControlName="descriptiveGrade">
             </mat-form-field>
         </form>
+        }
     </div>
 
 </div>

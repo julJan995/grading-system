@@ -1,6 +1,13 @@
 export interface GradeConfig {
     minPercentage: number;
-    maxPercentage: number;
-    grade: string;
-    gradeDescription: string;
+    maxPercentage?: number;
+    symbolicGrade: string;
+    descriptiveGrade?: string;
+}
+
+export interface Grade {
+    id: string;
+    minPercentage: number;
+    symbolicGrade: string;
+    descriptiveGrade?: string;
 }

@@ -1,12 +1,19 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { GradeConfig } from '../../models/grade-config.model';
+import { Grade, GradeConfig } from '../../models/grade-config.model';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { debounceTime, filter } from 'rxjs';
+import { GradingSystemService } from '../../services/grading-system.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+interface GradeWithRange extends Grade {
+  maxPercentage: number;
+}
 
 @Component({
   selector: 'app-grading-system-configuration',
@@ -17,14 +24,25 @@ import { debounceTime, filter } from 'rxjs';
     CommonModule,
     MatInputModule,
     MatFormFieldModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule
   ],
   templateUrl: './grading-system-configuration.component.html',
   styleUrl: './grading-system-configuration.component.scss'
 })
 export class GradingSystemConfigurationComponent implements OnInit {
 
+  private readonly gradingSystemService = inject(GradingSystemService);
   private fb = inject(FormBuilder);
+  gradesWithRanges = computed(() => {
+    const grades = this.gradingSystemService.grades();
+    return this.calculateRanges(grades);
+  });
+
+  isEditFormVisible = false;
+  selectedGradeId = signal<string | null>(null);
+
 
   gradeForm = this.fb.group({
     minPercentage: [0, [
@@ -37,11 +55,11 @@ export class GradingSystemConfigurationComponent implements OnInit {
       Validators.min(0), 
       Validators.max(100)
     ]],
-    grade: ['', [
+    symbolicGrade: ['', [
       Validators.required, 
       Validators.minLength(2)
     ]],
-    gradeDescription: ['', [
+    descriptiveGrade: ['', [
       Validators.required, 
       Validators.minLength(2)
     ]]
@@ -59,7 +77,7 @@ export class GradingSystemConfigurationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.gradingSystemService.loadGrades();
   }
 
   onSubmit() {
@@ -67,15 +85,15 @@ export class GradingSystemConfigurationComponent implements OnInit {
       const {
         minPercentage,
         maxPercentage,
-        grade,
-        gradeDescription 
+        symbolicGrade,
+        descriptiveGrade 
       } = this.gradeForm.value;
-      
+
       const gradeConfig: GradeConfig = {
         minPercentage: minPercentage || 0,
         maxPercentage: maxPercentage || 0,
-        grade: grade || '',
-        gradeDescription: gradeDescription || ''
+        symbolicGrade: symbolicGrade || '',
+        descriptiveGrade: descriptiveGrade || ''
       };
       
       console.log(gradeConfig);
@@ -86,4 +104,31 @@ export class GradingSystemConfigurationComponent implements OnInit {
     this.gradeForm.patchValue(gradeConfig);
   }
 
+  private calculateRanges(grades: Grade[]): GradeWithRange[] {
+    const sorted = [...grades].sort((a, b) => a.minPercentage - b.minPercentage);
+    
+    return sorted.map((grade, index) => ({
+      ...grade,
+      maxPercentage: index < sorted.length - 1 
+        ? sorted[index + 1].minPercentage - 1 
+        : 100
+    }));
+  }
+
+  showEditForm() {
+    this.isEditFormVisible = true;
+  }
+
+  addNewGrade() {
+    this.isEditFormVisible = true;
+  }
+
+  selectGrade(gradeId: string): void {
+    this.selectedGradeId.set(gradeId);
+    this.showEditForm();
+  }
+
+  deleteGrade(gradeId: string) {
+    // to do popup
+  }
 }
