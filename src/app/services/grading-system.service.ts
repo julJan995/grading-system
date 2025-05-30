@@ -1,94 +1,131 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
-import { Observable, catchError, delay, of, switchMap, throwError } from 'rxjs';
-import { Grade } from '../models/grade-config.model';
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { Observable, delay, of, throwError } from 'rxjs';
+import { Grade, GradeConfig } from '../models/grade-config.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GradingSystemService {
-
   private readonly http = inject(HttpClient);
   private readonly GRADES_JSON_PATH = '/assets/grades.json';
   private readonly MOCK_DELAY_MS = 300;
   private readonly ID_PREFIX = 'ungr-';
   private readonly CONFLICT_ERROR_CODE = 'AS014';
   private readonly CONFLICT_ERROR_MESSAGE = 'Minimum percentage value is already used!';
-
-  private _grades = signal<Grade[]>([]);
-  readonly grades = this._grades.asReadonly();
+  private mockDatabase: Grade[] = [];
+  private _gradesSignal = signal<Grade[]>([]);
+  readonly grades = computed(() => this._gradesSignal());
 
   loadGrades(): void {
     this.http.get<Grade[]>(this.GRADES_JSON_PATH)
-      .subscribe(grades => this._grades.set(grades));
+      .subscribe({
+        next: (grades) => {
+          this.mockDatabase = [...grades];
+          this._gradesSignal.set([...grades]);
+        },
+        error: (error) => console.error('Failed to load grades:', error)
+      });
   }
 
   getGrades(): Observable<Grade[]> {
-    return this.http.get<Grade[]>(this.GRADES_JSON_PATH);
+    return of([...this.mockDatabase]).pipe(delay(this.MOCK_DELAY_MS));
   }
 
   getGradeById(gradeId: string): Observable<Grade> {
-    return this.getGrades().pipe(
-      switchMap(grades => {
-        const grade = grades.find(g => g.id === gradeId);
-        if (!grade) {
-          const notFoundError = new HttpErrorResponse({
-            error: { message: 'Grade not found' },
-            status: 404,
-            statusText: 'Not Found'
-          });
-          return throwError(() => notFoundError);
-        }
-        return of(grade).pipe(delay(this.MOCK_DELAY_MS));
-      }),
-      catchError(this.handleError)
-    );
+    const grade = this.mockDatabase.find(g => g.id === gradeId);
+    if (!grade) {
+      return throwError(() => new HttpErrorResponse({
+        error: { message: 'Grade not found' },
+        status: 404,
+        statusText: 'Not Found'
+      })).pipe(delay(this.MOCK_DELAY_MS));
+    }
+    return of(grade).pipe(delay(this.MOCK_DELAY_MS));
   }
 
-  createGrade(grade: Grade): Observable<Grade> {
-    return this.getGrades().pipe(
-      switchMap(existingGrades => {
-        if (this.isDuplicatePercentage(existingGrades, grade.minPercentage)) {
-          return this.createConflictError();
-        }
-        return this.createMockResponse(grade);
-      }),
-      catchError(this.handleError)
-    );
+  createGrade(gradeConfig: GradeConfig): Observable<Grade> {
+    if (this.isDuplicatePercentage(this.mockDatabase, gradeConfig.minPercentage)) {
+      return this.createConflictError().pipe(delay(this.MOCK_DELAY_MS));
+    }
+
+    const newGrade: Grade = {
+      id: this.generateId(),
+      minPercentage: gradeConfig.minPercentage,
+      symbolicGrade: gradeConfig.symbolicGrade,
+      descriptiveGrade: gradeConfig.descriptiveGrade
+    };
+
+    this.mockDatabase.push(newGrade);
+    this._gradesSignal.set([...this.mockDatabase]);
+    
+    return of(newGrade).pipe(delay(this.MOCK_DELAY_MS));
   }
 
-  private isDuplicatePercentage(existingGrades: Grade[], minPercentage: number): boolean {
-    return existingGrades.some(grade => grade.minPercentage === minPercentage);
+  updateGrade(gradeId: string, gradeConfig: GradeConfig): Observable<Grade> {
+    const gradeIndex = this.mockDatabase.findIndex(g => g.id === gradeId);
+    
+    if (gradeIndex === -1) {
+      return throwError(() => new HttpErrorResponse({
+        error: { message: 'Grade not found' },
+        status: 404,
+        statusText: 'Not Found'
+      })).pipe(delay(this.MOCK_DELAY_MS));
+    }
+
+    const isDuplicate = this.mockDatabase.some(g => 
+      g.id !== gradeId && g.minPercentage === gradeConfig.minPercentage
+    );
+    
+    if (isDuplicate) {
+      return this.createConflictError().pipe(delay(this.MOCK_DELAY_MS));
+    }
+
+    this.mockDatabase[gradeIndex] = {
+      ...this.mockDatabase[gradeIndex],
+      minPercentage: gradeConfig.minPercentage,
+      symbolicGrade: gradeConfig.symbolicGrade,
+      descriptiveGrade: gradeConfig.descriptiveGrade
+    };
+    
+    this._gradesSignal.set([...this.mockDatabase]);
+    
+    return of(this.mockDatabase[gradeIndex]).pipe(delay(this.MOCK_DELAY_MS));
+  }
+
+  deleteGrade(gradeId: string): Observable<void> {
+    const gradeIndex = this.mockDatabase.findIndex(g => g.id === gradeId);
+    
+    if (gradeIndex === -1) {
+      return throwError(() => new HttpErrorResponse({
+        status: 404,
+        statusText: 'Not Found'
+      })).pipe(delay(this.MOCK_DELAY_MS));
+    }
+
+    this.mockDatabase.splice(gradeIndex, 1);
+    
+    this._gradesSignal.set([...this.mockDatabase]);
+    
+    return of(void 0).pipe(delay(this.MOCK_DELAY_MS));
   }
 
   private createConflictError(): Observable<never> {
-    const error = new HttpErrorResponse({
+    return throwError(() => new HttpErrorResponse({
       error: {
         errorCode: this.CONFLICT_ERROR_CODE,
         errorMessage: this.CONFLICT_ERROR_MESSAGE
       },
       status: 409,
       statusText: 'Conflict'
-    });
-    return throwError(() => error);
+    }));
   }
 
-  private createMockResponse(grade: Grade): Observable<Grade> {
-    const mockResponse: Grade = {
-      id: this.generateId(),
-      minPercentage: grade.minPercentage,
-      symbolicGrade: grade.symbolicGrade
-    };
-
-    return of(mockResponse).pipe(delay(this.MOCK_DELAY_MS));
+  private isDuplicatePercentage(existingGrades: Grade[], minPercentage: number): boolean {
+    return existingGrades.some(grade => grade.minPercentage === minPercentage);
   }
 
   private generateId(): string {
     return `${this.ID_PREFIX}${crypto.randomUUID().replace(/-/g, '').substring(0, 8)}`;
   }
-
-  private handleError = (error: HttpErrorResponse): Observable<never> => {
-    console.error('GradeService error:', error);
-    return throwError(() => error);
-  };
 }

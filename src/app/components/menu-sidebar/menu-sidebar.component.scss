@@ -39,12 +39,14 @@
             width: 100px;
         }
 
-        &:hover {
+        &:hover,
+        &--active {
             background-color: color-mix(in srgb,
                     var(--color-green-dark) 90%,
                     white 10%);
             border-left: 3px solid var(--color-green-light);
         }
+
 
         mat-icon {
             color: var(--color-white);

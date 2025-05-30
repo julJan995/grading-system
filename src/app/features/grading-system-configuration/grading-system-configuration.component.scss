@@ -58,5 +58,26 @@
         height: 100vh;
         background-color: var(--color-gray);
         gap: 5px;
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+            .form-field {
+                max-width: 210px;
+            }
+
+            &__column {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            &__row {
+                display: flex;
+                gap: 10px;
+            }
+        }
     }
 }

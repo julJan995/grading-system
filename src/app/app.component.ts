@@ -8,7 +8,8 @@ import { MenuSidebarComponent } from './components/menu-sidebar/menu-sidebar.com
   selector: 'app-root',
   imports: [
     RouterOutlet,
-    MenuSidebarComponent
+    MenuSidebarComponent,
+    HeaderComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

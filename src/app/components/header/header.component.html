@@ -1,4 +1,13 @@
 <div class="header">
-    <p>Grading System</p>
+    <div class="configuration-view">
+        @if (isConfigurationRoute) {
+        <div 
+            class="back-btn"
+            (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </div>
+        <p>Grading System</p>
+        }
+    </div>
     <app-menu></app-menu>
 </div>
