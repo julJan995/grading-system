@@ -1,59 +1,101 @@
 # GradingSystem
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.13.
+Responsive Angular application for configuring school grade thresholds. Built with Angular 19, TypeScript, and Angular Material.
 
-## Development server
+## Overview
 
-To start a local development server, run:
+GradingSystem allows educational institutions to configure and manage grade thresholds. The application provides an interface for setting percentage ranges and corresponding symbolic grades with real-time validation and auto-save functionality.
+
+## Features
+
+- Create, edit, and delete grade thresholds
+- Automatic percentage range calculation
+- Real-time form validation with conflict detection
+- Auto-save with 1-second debounce
+- Responsive design (mobile, tablet, desktop)
+- Error handling with user-friendly messages
+
+## Technology Stack
+
+- Angular 19.2.13
+- TypeScript
+- SCSS
+- Angular Material
+- Angular Signals
+- RxJS
+- Jasmine & Karma for testing
+
+## Installation
 
 ```bash
+# Clone repository
+git clone <repository-url>
+cd grading-system
+
+# Install dependencies
+npm install
+
+# Start development server
 ng serve
+
+Navigate to `http://localhost:4200/`
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Build
 
 ```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
+# Development build
 ng build
+
+# Production build
+ng build --configuration=production
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Testing
 
 ```bash
+# Run unit tests
 ng test
+
+# Run tests with coverage
+ng test --code-coverage
 ```
 
-## Running end-to-end tests
+## Project Structure
 
-For end-to-end (e2e) testing, run:
+src/app/
+├── components/layout/           # Header, sidebar components
+├── features/grading-system-configuration/  # Main feature module
+├── models/                      # TypeScript interfaces
+├── services/                    # Angular services
+└── styles/                      # SCSS variables and mixins
 
-```bash
-ng e2e
-```
+## Responsive Design
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- **Mobile**: ≤ 576px - Stacked layout
+- **Tablet**: 577px - 991px - Optimized layout  
+- **Desktop**: ≥ 992px - Side-by-side panels
 
-## Additional Resources
+## API
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+The application uses a mocked REST API:
+
+- `GET /grades` - List all grades
+- `POST /grades` - Create new grade
+- `GET /grades/{id}` - Get specific grade
+- `PATCH /grades/{id}` - Update grade
+- `DELETE /grades/{id}` - Delete grade
+
+## Key Features
+
+### Grade Management
+- Add new grades with minimum percentage and symbolic name
+- Edit existing grades with real-time updates
+- Delete grades with confirmation
+- Automatic conflict detection for duplicate percentages
+
+### User Experience
+- Auto-save after form changes
+- Loading states during operations
+- Comprehensive error handling
+- Form validation with immediate feedback

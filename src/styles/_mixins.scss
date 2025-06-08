@@ -1,0 +1,32 @@
+$breakpoint-mobile: 576;
+$breakpoint-tablet: 768;
+$breakpoint-desktop: 992;
+
+@mixin mobile {
+    @media (max-width: #{$breakpoint-mobile}px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: #{$breakpoint-mobile + 1}px) and (max-width: #{$breakpoint-desktop - 1}px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: #{$breakpoint-desktop}px) {
+        @content;
+    }
+}
+
+@mixin circle-icon($background-color, $icon-color: var(--white), $size: 50px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    width: $size;
+    height: $size;
+    background-color: $background-color;
+    color: $icon-color;
+}

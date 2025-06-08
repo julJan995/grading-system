@@ -1,0 +1,48 @@
+@use '../../../styles/mixins' as mixins;
+@use '../../../styles/variables' as *;
+
+.header {
+    position: fixed;
+    background-color: var(--color-white);
+    border-bottom: 1px solid var(--color-gray);
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    top: 0;
+    left: 0;
+    z-index: 99;
+
+    @include mixins.mobile {
+        height: 60px;
+        margin-left: $sidebar-width-mobile;
+        width: calc(100vw - #{$sidebar-width-mobile});
+    }
+
+    @include mixins.tablet {
+        height: 60px;
+        margin-left: $sidebar-width-tablet;
+        width: calc(100vw - #{$sidebar-width-tablet});
+    }
+
+    @include mixins.desktop {
+        height: 60px;
+        margin-left: $sidebar-width-desktop;
+        width: calc(100vw - #{$sidebar-width-desktop});
+    }
+
+    .back-btn {
+        @include mixins.circle-icon(var(--color-green-base));
+        cursor: pointer;
+
+        &:hover {
+            background-color: color-mix(in srgb, var(--color-green-base) 80%, var(--color-white));
+        }
+    }
+
+    .configuration-view {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-left: 20px;
+    }
+}

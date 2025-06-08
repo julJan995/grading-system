@@ -1,0 +1,25 @@
+@use 'variables' as variables;
+@use 'reset';
+@use 'mixins';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-mdc-button {
+    --mdc-text-button-label-text-color: var(--color-green-dark) !important;
+
+    &:hover {
+        background-color: rgba(0, 128, 0, 0.1) !important;
+    }
+
+    mat-icon {
+        color: inherit;
+    }
+}

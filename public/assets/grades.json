@@ -1,0 +1,13 @@
+[
+    {
+        "id": "ungr-0e0668e7-e907-4c7d-8af9-a0a4a37f6d82",
+        "minPercentage": 0,
+        "symbolicGrade": "Good",
+        "descriptiveGrade": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
+    },
+    {
+        "id": "ungr-2ebf3a08-6246-4005-a2b4-6d8b3d9349c2",
+        "minPercentage": 50,
+        "symbolicGrade": "Very Good"
+    }
+]

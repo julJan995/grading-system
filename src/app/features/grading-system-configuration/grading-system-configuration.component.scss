@@ -1,0 +1,159 @@
+@use '../../../styles/mixins' as mixins;
+@use '../../../styles/variables' as *;
+
+.configuration {
+    display: flex;
+    padding-top: 60px;
+
+    @include mixins.mobile {
+        padding-left: $sidebar-width-mobile;
+        flex-direction: column;
+    }
+
+    @include mixins.tablet {
+        padding-left: $sidebar-width-tablet;
+        flex-direction: column;
+    }
+
+    @include mixins.desktop {
+        padding-left: $sidebar-width-desktop;
+        flex-direction: row;
+    }
+
+    &__grade-list {
+        padding: 20px;
+        background-color: var(--color-green-light);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        overflow: auto;
+
+        @include mixins.mobile {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.tablet {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.desktop {
+            width: calc(56vw - 85px);
+            height: 100vh;
+        }
+
+        .grade-item {
+            width: 100%;
+            height: 45px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 12px;
+
+            :first-of-type {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100px;
+            }
+
+            &:hover {
+                background-color: var(--color-gray);
+            }
+
+            mat-icon {
+                color: var(--color-dark-gray);
+
+                &:hover {
+                    color: var(--color-warning-red);
+                }
+            }
+
+            &--selected {
+                background: var(--color-white);
+                border: 1px solid var(--color-dark-gray);
+
+                &:hover {
+                    background-color: var(--color-white);
+                }
+            }
+        }
+
+        .new-grade-btn {
+            margin-top: 20px;
+        }
+    }
+
+    &__grade-form {
+        padding: 20px;
+        background-color: var(--color-gray);
+        gap: 5px;
+        overflow: auto;
+
+        @include mixins.mobile {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.tablet {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.desktop {
+            width: calc(56vw - 85px);
+            height: 100vh;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+
+            .form-field {
+                max-width: 210px;
+            }
+
+            &__column {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                @include mixins.mobile {
+                    align-items: center;
+                }
+
+                @include mixins.tablet {
+                    align-items: center
+                }
+            }
+
+            &__row {
+                @include mixins.mobile {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                @include mixins.tablet {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                @include mixins.desktop {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 10px;
+                }
+            }
+        }
+    }
+}
