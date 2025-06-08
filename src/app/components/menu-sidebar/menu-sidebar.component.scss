@@ -1,7 +1,7 @@
 @use '../../../styles/mixins' as mixins;
+@use '../../../styles/variables' as *;
 
 .sidebar {
-    width: 85px;
     height: 100vh;
     position: fixed;
     background-color: var(--color-green-dark);
@@ -11,12 +11,16 @@
     justify-content: flex-start;
     align-items: center;
 
+    @include mixins.mobile {
+        width: $sidebar-width-mobile;
+    }
+
     @include mixins.tablet {
-        width: 90px;
+        width: $sidebar-width-tablet;
     }
 
     @include mixins.desktop {
-        width: 100px;
+        width: $sidebar-width-desktop;
     }
 
     &-item {
@@ -31,12 +35,16 @@
         height: 55px;
         width: 85px;
 
-        @include mixins.tablet {
-            width: 90px;
+        @include mixins.mobile {
+            width: $sidebar-width-mobile;
         }
-
+    
+        @include mixins.tablet {
+            width: $sidebar-width-tablet;
+        }
+    
         @include mixins.desktop {
-            width: 100px;
+            width: $sidebar-width-desktop;
         }
 
         &:hover,

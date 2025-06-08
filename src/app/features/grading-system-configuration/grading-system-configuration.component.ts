@@ -68,15 +68,16 @@ export class GradingSystemConfigurationComponent implements OnInit {
       .subscribe(() => {
         this.saveGrade();
       });
-  }
 
-  ngOnInit(): void {
-    this.gradingSystemService.loadGrades();
-    this.gradeForm.get('minPercentage')?.valueChanges
+      this.gradeForm.get('minPercentage')?.valueChanges
       .pipe(takeUntilDestroyed())
       .subscribe(() => {
         this.updateMaxPercentage();
       })
+  }
+
+  ngOnInit(): void {
+    this.gradingSystemService.loadGrades();
   }
 
   private updateMaxPercentage(): void {

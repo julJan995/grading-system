@@ -1,18 +1,48 @@
+@use '../../../styles/mixins' as mixins;
+@use '../../../styles/variables' as *;
+
 .configuration {
     display: flex;
-    flex-direction: row;
     padding-top: 60px;
-    padding-left: 85px;
+
+    @include mixins.mobile {
+        padding-left: $sidebar-width-mobile;
+        flex-direction: column;
+    }
+
+    @include mixins.tablet {
+        padding-left: $sidebar-width-tablet;
+        flex-direction: column;
+    }
+
+    @include mixins.desktop {
+        padding-left: $sidebar-width-desktop;
+        flex-direction: row;
+    }
 
     &__grade-list {
         padding: 20px;
-        width: calc(56vw - 85px);
-        height: 100vh;
         background-color: var(--color-green-light);
         display: flex;
         flex-direction: column;
         align-items: center;
         gap: 5px;
+        overflow: auto;
+
+        @include mixins.mobile {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.tablet {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.desktop {
+            width: calc(56vw - 85px);
+            height: 100vh;
+        }
 
         .grade-item {
             width: 100%;
@@ -24,6 +54,13 @@
             cursor: pointer;
             padding: 12px;
             border-radius: 12px;
+
+            :first-of-type {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                width: 100px;
+            }
 
             &:hover {
                 background-color: var(--color-gray);
@@ -54,10 +91,24 @@
 
     &__grade-form {
         padding: 20px;
-        width: calc(56vw - 85px);
-        height: 100vh;
         background-color: var(--color-gray);
         gap: 5px;
+        overflow: auto;
+
+        @include mixins.mobile {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.tablet {
+            width: 100%;
+            height: 100%;
+        }
+
+        @include mixins.desktop {
+            width: calc(56vw - 85px);
+            height: 100vh;
+        }
 
         .form-container {
             display: flex;
@@ -72,11 +123,36 @@
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
+
+                @include mixins.mobile {
+                    align-items: center;
+                }
+
+                @include mixins.tablet {
+                    align-items: center
+                }
             }
 
             &__row {
-                display: flex;
-                gap: 10px;
+                @include mixins.mobile {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                @include mixins.tablet {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                @include mixins.desktop {
+                    display: flex;
+                    flex-direction: row;
+                    gap: 10px;
+                }
             }
         }
     }

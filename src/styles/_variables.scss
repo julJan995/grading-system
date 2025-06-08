@@ -8,10 +8,9 @@
     --color-black: #111;
     --color-white: #fff;
     --color-warning-red: #fd4848;
-
-    // Breakpoints
-    --breakpoint-mobile: 576;
-    --breakpoint-tablet: 768;
-    --breakpoint-desktop: 992;
-    --breakpoint-large: 1200;
 }
+
+// Layout
+$sidebar-width-mobile: 65px;
+$sidebar-width-tablet: 90px;
+$sidebar-width-desktop: 100px;
